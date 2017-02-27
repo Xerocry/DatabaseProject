@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE xml>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="departments" pkName="pk_departments">
+            <column name="depart_id" type="bigint" primaryKey="true"/>
+            <column name="depart_name" type="varchar(50)" notnull="true"/>
+        </createTable>
+        <createTable name="diseases" pkName="pk_diseases">
+            <column name="disease_id" type="bigint" primaryKey="true"/>
+            <column name="symptoms" type="varchar(50)"/>
+            <column name="dis_type_type_id" type="bigint" notnull="true" references="diseases_types.type_id" foreignKeyName="fk_diseases_dis_type_type_id" foreignKeyIndex="ix_diseases_dis_type_type_id"/>
+            <column name="disease_name" type="varchar(50)" notnull="true"/>
+        </createTable>
+        <createTable name="diseases_types" pkName="pk_diseases_types">
+            <column name="type_id" type="bigint" primaryKey="true"/>
+            <column name="dis_type" type="varchar(50)"/>
+        </createTable>
+        <createTable name="DOCTORS" pkName="pk_doctors">
+            <column name="doctor_id" type="bigint" primaryKey="true"/>
+            <column name="years_of_expirience" type="integer"/>
+            <column name="skill_desc" type="varchar(50)"/>
+            <column name="hire_date" type="date" notnull="true"/>
+            <column name="depart_id_depart_id" type="bigint" notnull="true" references="departments.depart_id" foreignKeyName="fk_doctors_depart_id_depart_id" foreignKeyIndex="ix_doctors_depart_id_depart_id"/>
+        </createTable>
+        <createTable name="drugs" pkName="pk_drugs">
+            <column name="drug_id" type="bigint" primaryKey="true"/>
+            <column name="type_id_type_id" type="bigint" notnull="true" references="diseases_types.type_id" foreignKeyName="fk_drugs_type_id_type_id" foreignKeyIndex="ix_drugs_type_id_type_id"/>
+            <column name="drug_name" type="varchar(50)"/>
+            <column name="price" type="integer"/>
+        </createTable>
+        <createTable name="grants" pkName="pk_grants">
+            <column name="grant_id" type="bigint" primaryKey="true"/>
+            <column name="grant_sum" type="bigint"/>
+            <column name="grant_date" type="date" notnull="true"/>
+            <column name="paid_up" type="boolean"/>
+            <column name="service_service_id" type="bigint" references="services.service_id" foreignKeyName="fk_grants_service_service_id" foreignKeyIndex="ix_grants_service_service_id"/>
+            <column name="drug_drug_id" type="bigint" references="drugs.drug_id" foreignKeyName="fk_grants_drug_drug_id" foreignKeyIndex="ix_grants_drug_drug_id"/>
+            <column name="doctor_doctor_id" type="bigint" references="DOCTORS.doctor_id" foreignKeyName="fk_grants_doctor_doctor_id" foreignKeyIndex="ix_grants_doctor_doctor_id"/>
+            <column name="patient_patient_id" type="bigint" references="patients.patient_id" foreignKeyName="fk_grants_patient_patient_id" foreignKeyIndex="ix_grants_patient_patient_id"/>
+        </createTable>
+        <createTable name="patients" pkName="pk_patients">
+            <column name="patient_id" type="bigint" primaryKey="true"/>
+            <column name="reg_date" type="date"/>
+            <column name="city" type="varchar"/>
+            <column name="p_name" type="varchar" notnull="true"/>
+            <column name="dob" type="date" notnull="true"/>
+            <column name="gender" type="varchar(1)" notnull="true" checkConstraint="check ( gender in ('M','F'))" checkConstraintName="ck_patients_gender"/>
+        </createTable>
+        <createTable name="services" pkName="pk_services">
+            <column name="service_id" type="bigint" primaryKey="true"/>
+            <column name="service_name" type="varchar(50)" notnull="true"/>
+            <column name="price" type="integer"/>
+        </createTable>
+        <createTable name="Treatment" pkName="pk_treatment">
+            <column name="treatment_id" type="bigint" primaryKey="true"/>
+            <column name="patient_id_patient_id" type="bigint" notnull="true" references="patients.patient_id" foreignKeyName="fk_treatment_patient_id_patient_id" foreignKeyIndex="ix_treatment_patient_id_patient_id"/>
+            <column name="doctor_id_doctor_id" type="bigint" notnull="true" references="DOCTORS.doctor_id" foreignKeyName="fk_treatment_doctor_id_doctor_id" foreignKeyIndex="ix_treatment_doctor_id_doctor_id"/>
+            <column name="disease_id_disease_id" type="bigint" references="diseases.disease_id" foreignKeyName="fk_treatment_disease_id_disease_id" foreignKeyIndex="ix_treatment_disease_id_disease_id"/>
+            <column name="start_date" type="date" notnull="true"/>
+            <column name="end_date" type="date"/>
+            <column name="treatment" type="varchar"/>
+        </createTable>
+        <createTable name="TREATMENT_DRUGS" pkName="pk_treatment_drugs">
+            <column name="treatment_id" type="bigint" notnull="true" primaryKey="true"/>
+            <column name="drug_id" type="bigint" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_treatment_drugs_treatment" columnNames="treatment_id" refColumnNames="treatment_id" refTableName="Treatment" indexName="ix_treatment_drugs_treatment"/>
+            <foreignKey name="fk_treatment_drugs_drugs" columnNames="drug_id" refColumnNames="drug_id" refTableName="drugs" indexName="ix_treatment_drugs_drugs"/>
+        </createTable>
+        <createTable name="TREATMENT_SERVICES" pkName="pk_treatment_services">
+            <column name="treatment_id" type="bigint" notnull="true" primaryKey="true"/>
+            <column name="service_id" type="bigint" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_treatment_services_treatment" columnNames="treatment_id" refColumnNames="treatment_id" refTableName="Treatment" indexName="ix_treatment_services_treatment"/>
+            <foreignKey name="fk_treatment_services_services" columnNames="service_id" refColumnNames="service_id" refTableName="services" indexName="ix_treatment_services_services"/>
+        </createTable>
+    </changeSet>
+</migration>
