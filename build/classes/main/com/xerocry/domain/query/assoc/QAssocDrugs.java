@@ -20,7 +20,7 @@ public class QAssocDrugs<R> extends TQAssocBean<Drugs,R> {
   public PLong<R> drugId;
   public QAssocDiseasesTypes<R> typeId;
   public PString<R> drugName;
-  public PInteger<R> price;
+  public PInteger<R> bff;
   public QAssocTreatment<R> treatments;
 
   /**

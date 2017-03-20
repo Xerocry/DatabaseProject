@@ -2,9 +2,7 @@ package com.xerocry.domain;
 
 import io.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by raskia on 2/23/2017.
@@ -13,6 +11,7 @@ import javax.persistence.Id;
 public class DiseasesTypes extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long type_id;
 
     @Column(length = 50, name = "dis_type")

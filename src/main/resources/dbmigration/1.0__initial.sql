@@ -32,7 +32,7 @@ create table drugs (
   drug_id                       bigserial not null,
   type_id_type_id               bigint not null,
   drug_name                     varchar(50),
-  price                         integer,
+  bff                           integer,
   constraint pk_drugs primary key (drug_id)
 );
 
@@ -57,6 +57,19 @@ create table patients (
   gender                        varchar(1) not null,
   constraint ck_patients_gender check ( gender in ('M','F')),
   constraint pk_patients primary key (patient_id)
+);
+
+create table payment_patient (
+  patient_id                    bigint not null,
+  payment_id                    bigint not null,
+  constraint pk_payment_patient primary key (patient_id,payment_id)
+);
+
+create table payments (
+  payment_id                    bigserial not null,
+  discount                      float,
+  balance                       float not null,
+  constraint pk_payments primary key (payment_id)
 );
 
 create table services (
@@ -109,6 +122,12 @@ create index ix_grants_doctor_doctor_id on grants (doctor_doctor_id);
 
 alter table grants add constraint fk_grants_patient_patient_id foreign key (patient_patient_id) references patients (patient_id) on delete restrict on update restrict;
 create index ix_grants_patient_patient_id on grants (patient_patient_id);
+
+alter table payment_patient add constraint fk_payment_patient_patients foreign key (patient_id) references patients (patient_id) on delete restrict on update restrict;
+create index ix_payment_patient_patients on payment_patient (patient_id);
+
+alter table payment_patient add constraint fk_payment_patient_payments foreign key (payment_id) references payments (payment_id) on delete restrict on update restrict;
+create index ix_payment_patient_payments on payment_patient (payment_id);
 
 alter table treatment add constraint fk_treatment_patient_id_patient_id foreign key (patient_id_patient_id) references patients (patient_id) on delete restrict on update restrict;
 create index ix_treatment_patient_id_patient_id on treatment (patient_id_patient_id);

@@ -26,6 +26,7 @@ public class QAssocPatients<R> extends TQAssocBean<Patients,R> {
   public PLocalDate<R> birthDate;
   public PEnum<R,Gender> gender;
   public QAssocTreatment<R> treatments;
+  public QAssocPayments<R> payments;
 
   /**
    * Eagerly fetch this association loading the specified properties.

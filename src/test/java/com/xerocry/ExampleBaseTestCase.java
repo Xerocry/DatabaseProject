@@ -5,6 +5,7 @@ package com.xerocry;
 //import org.slf4j.LoggerFactory;
 
 
+import main.BaseTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * - Specify the java agent on the command line
  *
  */
-public class ExampleBaseTestCase {
+public class ExampleBaseTestCase extends BaseTest{
 
   protected static Logger logger = LoggerFactory.getLogger(ExampleBaseTestCase.class);
 //

@@ -3,10 +3,7 @@ package com.xerocry.domain;
 import io.ebean.Model;
 import io.ebean.annotation.EnumValue;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +15,7 @@ import java.util.List;
 public class Patients extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "patient_id")
     Long patientId;
 
@@ -45,14 +43,30 @@ public class Patients extends Model {
     @OneToMany(mappedBy = "patientId")
     List<Treatment> treatments = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "PAYMENT_PATIENT",
+            joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "payment_id", referencedColumnName = "payment_id"))
+    List<Payments> payments;
 
     public Patients(String name, LocalDate birthDate, Gender gender) {
-        this.regDate = regDate;
-        this.city = city;
         this.name = name;
         this.birthDate = birthDate;
         this.gender = gender;
     }
+
+    public Patients(Patients patient) {
+        this.regDate = patient.regDate;
+        this.city = patient.city;
+        this.name = patient.name;
+        this.birthDate = patient.birthDate;
+        this.gender = patient.gender;
+        this.treatments = patient.treatments;
+        this.payments = patient.payments;
+
+    }
+
+
 
     public LocalDate getRegDate() {
         return regDate;
@@ -92,5 +106,21 @@ public class Patients extends Model {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    public List<Treatment> getTreatments() {
+        return treatments;
+    }
+
+    public void addTreatments(Treatment treatments) {
+        this.treatments.add(treatments);
+    }
+
+    public List<Payments> getPayments() {
+        return payments;
+    }
+
+    public void addPayments(Payments payments) {
+        this.payments.add(payments);
     }
 }

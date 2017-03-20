@@ -6,8 +6,6 @@ package com.xerocry.service;
 import com.xerocry.domain.*;
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
-import javafx.scene.media.EqualizerBand;
-import org.assertj.core.internal.cglib.core.Local;
 //import com.xerocry.domain.Address;
 //import com.xerocry.domain.Contact;
 //import com.xerocry.domain.Country;
@@ -17,11 +15,8 @@ import org.assertj.core.internal.cglib.core.Local;
 //import com.xerocry.domain.OrderDetail;
 //import com.xerocry.domain.Product;
 
-import javax.print.Doc;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 public class LoadExampleData {
@@ -30,7 +25,10 @@ public class LoadExampleData {
 
     private static EbeanServer server = Ebean.getServer(null);
 
-    public static synchronized void load() {
+    static PatientsGenerator patientGen;
+
+    public static synchronized void load() throws FileNotFoundException{
+        patientGen  = new PatientsGenerator();
 
         if (runOnce) {
             return;
@@ -42,10 +40,14 @@ public class LoadExampleData {
 //            if (Country.find.query().findCount() > 0) {
 //                return;
 //            }
-            me.deleteAll();
-            me.insertPatients();
-            me.createTreatment("Treat1", LocalDate.now(), LocalDate.of(2015, 12, 02));
-            me.createTreatment("Treat2", LocalDate.now(), LocalDate.of(2016, 11, 02));
+//            me.deleteAll();
+            for(int i=0; i<1000;i++) {
+                new Patients(patientGen.random.nextObject(Patients.class)).save();
+            }
+            new Patients(patientGen.random.nextObject(Patients.class)).save();
+//            me.insertPatients();
+//            me.createTreatment("Treat1", LocalDate.now(), LocalDate.of(2015, 12, 02));
+//            me.createTreatment("Treat2", LocalDate.now(), LocalDate.of(2016, 11, 02));
 //            me.insertCountries();
 //            me.insertProducts();
 //            me.insertTestCustAndOrders();

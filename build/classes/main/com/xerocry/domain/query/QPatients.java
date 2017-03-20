@@ -2,6 +2,7 @@ package com.xerocry.domain.query;
 
 import com.xerocry.domain.Patients;
 import com.xerocry.domain.Patients.Gender;
+import com.xerocry.domain.query.assoc.QAssocPayments;
 import com.xerocry.domain.query.assoc.QAssocTreatment;
 import io.ebean.EbeanServer;
 import io.ebean.typequery.PEnum;
@@ -36,6 +37,7 @@ public class QPatients extends TQRootBean<Patients,QPatients> {
   public PLocalDate<QPatients> birthDate;
   public PEnum<QPatients,Gender> gender;
   public QAssocTreatment<QPatients> treatments;
+  public QAssocPayments<QPatients> payments;
 
 
   /**
@@ -71,5 +73,6 @@ public class QPatients extends TQRootBean<Patients,QPatients> {
     public static PLocalDate<QPatients> birthDate = _alias.birthDate;
     public static PEnum<QPatients,Gender> gender = _alias.gender;
     public static QAssocTreatment<QPatients> treatments = _alias.treatments;
+    public static QAssocPayments<QPatients> payments = _alias.payments;
   }
 }

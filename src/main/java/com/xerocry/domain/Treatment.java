@@ -14,6 +14,7 @@ import java.util.List;
 public class Treatment extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "treatment_id")
     Long id;
 

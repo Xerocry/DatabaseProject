@@ -31,7 +31,7 @@ public class QDrugs extends TQRootBean<Drugs,QDrugs> {
   public PLong<QDrugs> drugId;
   public QAssocDiseasesTypes<QDrugs> typeId;
   public PString<QDrugs> drugName;
-  public PInteger<QDrugs> price;
+  public PInteger<QDrugs> bff;
   public QAssocTreatment<QDrugs> treatments;
 
 
@@ -64,7 +64,7 @@ public class QDrugs extends TQRootBean<Drugs,QDrugs> {
     public static PLong<QDrugs> drugId = _alias.drugId;
     public static QAssocDiseasesTypes<QDrugs> typeId = _alias.typeId;
     public static PString<QDrugs> drugName = _alias.drugName;
-    public static PInteger<QDrugs> price = _alias.price;
+    public static PInteger<QDrugs> bff = _alias.bff;
     public static QAssocTreatment<QDrugs> treatments = _alias.treatments;
   }
 }

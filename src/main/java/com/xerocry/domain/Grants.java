@@ -12,6 +12,7 @@ import java.time.LocalDate;
 public class Grants extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "grant_id")
     Long grantId;
 

@@ -13,6 +13,7 @@ import java.util.List;
 public class Drugs extends Model {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "drug_id")
     Long drugId;
 
@@ -23,15 +24,15 @@ public class Drugs extends Model {
     @Column(length = 50, name = "drug_name")
     String drugName;
 
-    Integer price;
+    Integer bff;
 
     @ManyToMany(mappedBy = "drugs")
     List<Treatment> treatments = new ArrayList<>();
 
-    public Drugs(DiseasesTypes typeId, String drugName, Integer price) {
+    public Drugs(DiseasesTypes typeId, String drugName, Integer bff) {
         this.typeId = typeId;
         this.drugName = drugName;
-        this.price = price;
+        this.bff = bff;
     }
 
     public DiseasesTypes getTypeId() {
@@ -50,12 +51,12 @@ public class Drugs extends Model {
         this.drugName = drugName;
     }
 
-    public Integer getPrice() {
-        return price;
+    public Integer getBff() {
+        return bff;
     }
 
-    public void setPrice(Integer price) {
-        this.price = price;
+    public void setBff(Integer bff) {
+        this.bff = bff;
     }
 
     public List<Treatment> getTreatments() {

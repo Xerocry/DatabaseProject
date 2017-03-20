@@ -27,7 +27,7 @@
             <column name="drug_id" type="bigint" primaryKey="true"/>
             <column name="type_id_type_id" type="bigint" notnull="true" references="diseases_types.type_id" foreignKeyName="fk_drugs_type_id_type_id" foreignKeyIndex="ix_drugs_type_id_type_id"/>
             <column name="drug_name" type="varchar(50)"/>
-            <column name="price" type="integer"/>
+            <column name="bff" type="integer"/>
         </createTable>
         <createTable name="grants" pkName="pk_grants">
             <column name="grant_id" type="bigint" primaryKey="true"/>
@@ -46,6 +46,17 @@
             <column name="p_name" type="varchar" notnull="true"/>
             <column name="dob" type="date" notnull="true"/>
             <column name="gender" type="varchar(1)" notnull="true" checkConstraint="check ( gender in ('M','F'))" checkConstraintName="ck_patients_gender"/>
+        </createTable>
+        <createTable name="PAYMENT_PATIENT" pkName="pk_payment_patient">
+            <column name="patient_id" type="bigint" notnull="true" primaryKey="true"/>
+            <column name="payment_id" type="bigint" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_payment_patient_patients" columnNames="patient_id" refColumnNames="patient_id" refTableName="patients" indexName="ix_payment_patient_patients"/>
+            <foreignKey name="fk_payment_patient_payments" columnNames="payment_id" refColumnNames="payment_id" refTableName="payments" indexName="ix_payment_patient_payments"/>
+        </createTable>
+        <createTable name="payments" pkName="pk_payments">
+            <column name="payment_id" type="bigint" primaryKey="true"/>
+            <column name="discount" type="double"/>
+            <column name="balance" type="double" notnull="true"/>
         </createTable>
         <createTable name="services" pkName="pk_services">
             <column name="service_id" type="bigint" primaryKey="true"/>
