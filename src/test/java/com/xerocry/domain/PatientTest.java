@@ -1,20 +1,19 @@
 package com.xerocry.domain;
 
 //import com.xerocry.domain.query.QProduct;
-import com.xerocry.ExampleBaseTestCase;
+
 import com.xerocry.service.LoadExampleData;
-import main.BaseTest;
+import io.ebean.Platform;
+import io.ebean.dbmigration.DbMigration;
 import org.testng.annotations.Test;
 
-import java.io.FileNotFoundException;
-import java.util.List;
+import java.io.IOException;
 
-public class PatientTest extends BaseTest {
+public class PatientTest {
 
-  @Test
-  public void findSome() throws FileNotFoundException{
-
-    LoadExampleData.load();
+    @Test
+    public void findSome() throws IOException {
+        LoadExampleData.load();
 
 //    List<Product> products = new QProduct()
 //        .name.istartsWith("c")
@@ -27,5 +26,5 @@ public class PatientTest extends BaseTest {
 //        .name.istartsWith("c")
 //        .findList();
 //  }
-  }
+    }
 }

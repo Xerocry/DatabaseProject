@@ -4,7 +4,7 @@
     <changeSet type="apply">
         <createTable name="departments" pkName="pk_departments">
             <column name="depart_id" type="bigint" primaryKey="true"/>
-            <column name="depart_name" type="varchar(50)" notnull="true"/>
+            <column name="departdepart_name_id" type="varchar(50)" notnull="true"/>
         </createTable>
         <createTable name="diseases" pkName="pk_diseases">
             <column name="disease_id" type="bigint" primaryKey="true"/>
@@ -18,7 +18,7 @@
         </createTable>
         <createTable name="DOCTORS" pkName="pk_doctors">
             <column name="doctor_id" type="bigint" primaryKey="true"/>
-            <column name="years_of_expirience" type="integer"/>
+            <column name="years_of_experience" type="integer"/>
             <column name="skill_desc" type="varchar(50)"/>
             <column name="hire_date" type="date" notnull="true"/>
             <column name="depart_id_depart_id" type="bigint" notnull="true" references="departments.depart_id" foreignKeyName="fk_doctors_depart_id_depart_id" foreignKeyIndex="ix_doctors_depart_id_depart_id"/>
@@ -27,7 +27,6 @@
             <column name="drug_id" type="bigint" primaryKey="true"/>
             <column name="type_id_type_id" type="bigint" notnull="true" references="diseases_types.type_id" foreignKeyName="fk_drugs_type_id_type_id" foreignKeyIndex="ix_drugs_type_id_type_id"/>
             <column name="drug_name" type="varchar(50)"/>
-            <column name="bff" type="integer"/>
         </createTable>
         <createTable name="grants" pkName="pk_grants">
             <column name="grant_id" type="bigint" primaryKey="true"/>

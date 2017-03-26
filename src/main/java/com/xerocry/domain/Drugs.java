@@ -1,15 +1,21 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by raskia on 2/23/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Drugs extends Model {
 
     @Id
@@ -24,46 +30,18 @@ public class Drugs extends Model {
     @Column(length = 50, name = "drug_name")
     String drugName;
 
-    Integer bff;
-
     @ManyToMany(mappedBy = "drugs")
-    List<Treatment> treatments = new ArrayList<>();
+    Set<Treatment> treatments = new HashSet<>();
 
-    public Drugs(DiseasesTypes typeId, String drugName, Integer bff) {
+    public Drugs(DiseasesTypes typeId, String drugName) {
         this.typeId = typeId;
         this.drugName = drugName;
-        this.bff = bff;
     }
 
-    public DiseasesTypes getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(DiseasesTypes typeId) {
-        this.typeId = typeId;
-    }
-
-    public String getDrugName() {
-        return drugName;
-    }
-
-    public void setDrugName(String drugName) {
-        this.drugName = drugName;
-    }
-
-    public Integer getBff() {
-        return bff;
-    }
-
-    public void setBff(Integer bff) {
-        this.bff = bff;
-    }
-
-    public List<Treatment> getTreatments() {
-        return treatments;
-    }
-
-    public void setTreatments(List<Treatment> treatments) {
-        this.treatments = treatments;
+    public Drugs(Drugs other) {
+//        this.drugId = other.drugId;
+//        this.typeId = other.typeId;
+        this.drugName = other.drugName;
+//        this.treatments = other.treatments;
     }
 }

@@ -2,15 +2,21 @@ package com.xerocry.domain;
 
 import io.ebean.Model;
 import io.ebean.annotation.EnumValue;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by raskia on 2/27/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Payments extends Model {
 
     @Id
@@ -31,30 +37,12 @@ public class Payments extends Model {
     }
 
     @ManyToMany(mappedBy = "payments")
-    List<Patients> patients = new ArrayList<>();
+    Set<Patients> patients = new HashSet<>();
 
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public List<Patients> getPatients() {
-        return patients;
-    }
-
-    public void addPatients(Patients patients) {
-        this.patients.add(patients);
+    public Payments(Payments other) {
+//        this.paymentId = other.paymentId;
+        this.discount = other.discount;
+        this.balance = other.balance;
+//        this.patients = other.patients;
     }
 }

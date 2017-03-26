@@ -1,6 +1,8 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,6 +10,8 @@ import javax.persistence.*;
  * Created by raskia on 2/23/2017.
  */
 @Entity
+@Getter
+@Setter
 public class DiseasesTypes extends Model {
 
     @Id
@@ -24,19 +28,8 @@ public class DiseasesTypes extends Model {
         this.disType = disType;
     }
 
-    public String getDisType() {
-        return disType;
+    public DiseasesTypes(DiseasesTypes other) {
+//        this.type_id = other.type_id;
+        this.disType = other.disType;
     }
-
-    public void setDisType(String disType) {
-        this.disType = disType;
-    }
-
-    /*public List<Diseases> getDiseases() {
-        return diseases;
-    }
-
-    public void setDiseases(List<Diseases> diseases) {
-        this.diseases = diseases;
-    }*/
 }

@@ -1,7 +1,6 @@
--- apply changes
 create table departments (
   depart_id                     bigserial not null,
-  departdepart_name_id          varchar(50) not null,
+  depart_name                   varchar(50) not null,
   constraint pk_departments primary key (depart_id)
 );
 

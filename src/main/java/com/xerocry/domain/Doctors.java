@@ -1,6 +1,8 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,6 +12,8 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "DOCTORS")
+@Getter
+@Setter
 public class Doctors extends Model {
 
     @Id
@@ -21,7 +25,7 @@ public class Doctors extends Model {
     @Column(name = "treatment_id")
     List<Treatment> treatmentId = new ArrayList<>();*/
 
-    @Column(name = "years_of_expirience")
+    @Column(name = "years_of_experience")
     Integer experience;
 
     @Column(length=50, name = "skill_desc")
@@ -40,43 +44,11 @@ public class Doctors extends Model {
         this.hireDate = hireDate;
     }
 
-    /* public List<Treatment> getTreatmentId() {
-        return treatmentId;
-    }
-
-    public void setTreatmentId(List<Treatment> treatmentId) {
-        this.treatmentId = treatmentId;
-    }*/
-
-    public Integer getExperience() {
-        return experience;
-    }
-
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
-
-    public String getSkills() {
-        return skills;
-    }
-
-    public void setSkills(String skills) {
-        this.skills = skills;
-    }
-
-    public LocalDate getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(LocalDate hireDate) {
-        this.hireDate = hireDate;
-    }
-
-    public Departments getDepartId() {
-        return departId;
-    }
-
-    public void setDepartId(Departments departId) {
-        this.departId = departId;
+    public Doctors(Doctors other) {
+//        this.id = other.id;
+        this.experience = other.experience;
+        this.skills = other.skills;
+        this.hireDate = other.hireDate;
+//        this.departId = other.departId;
     }
 }

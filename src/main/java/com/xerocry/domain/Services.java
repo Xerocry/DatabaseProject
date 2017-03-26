@@ -1,14 +1,20 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by raskia on 2/23/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Services extends Model {
 
     @Id
@@ -22,34 +28,17 @@ public class Services extends Model {
     Integer price;
 
     @ManyToMany(mappedBy = "services")
-    List<Treatment> treatments;
+    Set<Treatment> treatments = new HashSet<>();
 
     public Services(String serviceName, Integer price) {
         this.serviceName = serviceName;
         this.price = price;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public List<Treatment> getTreatments() {
-        return treatments;
-    }
-
-    public void setTreatments(List<Treatment> treatments) {
-        this.treatments = treatments;
+    public Services(Services other) {
+//        this.serviceId = other.serviceId;
+        this.serviceName = other.serviceName;
+        this.price = other.price;
+//        this.treatments = other.treatments;
     }
 }

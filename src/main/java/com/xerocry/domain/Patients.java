@@ -2,16 +2,22 @@ package com.xerocry.domain;
 
 import io.ebean.Model;
 import io.ebean.annotation.EnumValue;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by raskia on 2/24/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Patients extends Model {
 
     @Id
@@ -47,7 +53,7 @@ public class Patients extends Model {
     @JoinTable(name = "PAYMENT_PATIENT",
             joinColumns = @JoinColumn(name = "patient_id", referencedColumnName = "patient_id"),
             inverseJoinColumns = @JoinColumn(name = "payment_id", referencedColumnName = "payment_id"))
-    List<Payments> payments;
+    Set<Payments> payments = new HashSet<>();
 
     public Patients(String name, LocalDate birthDate, Gender gender) {
         this.name = name;
@@ -61,66 +67,9 @@ public class Patients extends Model {
         this.name = patient.name;
         this.birthDate = patient.birthDate;
         this.gender = patient.gender;
-        this.treatments = patient.treatments;
-        this.payments = patient.payments;
-
+//        this.treatments = patient.treatments;
+//        this.payments = patient.payments;
     }
 
 
-
-    public LocalDate getRegDate() {
-        return regDate;
-    }
-
-    public void setRegDate(LocalDate regDate) {
-        this.regDate = regDate;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public Gender getGender() {
-        return gender;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public List<Treatment> getTreatments() {
-        return treatments;
-    }
-
-    public void addTreatments(Treatment treatments) {
-        this.treatments.add(treatments);
-    }
-
-    public List<Payments> getPayments() {
-        return payments;
-    }
-
-    public void addPayments(Payments payments) {
-        this.payments.add(payments);
-    }
 }

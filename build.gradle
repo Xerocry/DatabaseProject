@@ -33,6 +33,7 @@ dependencies {
     compile group: 'io.github.benas', name: 'random-beans', version: '3.6.0'
     // https://mvnrepository.com/artifact/io.github.benas/jpopulator
     compile group: 'io.github.benas', name: 'jpopulator', version: '1.2.0'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.14'
 
 
 

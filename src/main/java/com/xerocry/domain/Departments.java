@@ -1,50 +1,38 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by raskia on 2/23/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Departments extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long depart_id;
+    @Column(name = "depart_id")
+    Long departId;
 
-    @Column(length=50, nullable = false)
-    String depart_name;
+    @Column(length=50, nullable = false, name = "depart_name")
+    String departName;
 
-    /*@OneToMany(mappedBy = "DOCTORS")
-    List<Doctors> doctors;*/
+    @OneToMany(mappedBy = "departId")
+    List<Doctors> doctors;
 
     public Departments(String depart_name) {
-        this.depart_name = depart_name;
+        this.departName = depart_name;
     }
 
-    public Long getDepart_id() {
-        return depart_id;
+    public Departments(Departments other) {
+//        this.departId = other.departId;
+        this.departName = other.departName;
+        this.doctors = other.doctors;
     }
-
-    public void setDepart_id(Long depart_id) {
-        this.depart_id = depart_id;
-    }
-
-    public String getDepart_name() {
-        return depart_name;
-    }
-
-    public void setDepart_name(String depart_name) {
-        this.depart_name = depart_name;
-    }
-
-    /*public List<Doctors> getDoctors() {
-        return doctors;
-    }
-
-    public void setDoctors(List<Doctors> doctors) {
-        this.doctors = doctors;
-    }*/
 }

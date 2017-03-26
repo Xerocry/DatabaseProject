@@ -5,65 +5,49 @@ import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.FieldDefinitionBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import io.github.benas.randombeans.api.Randomizer;
+import io.github.benas.randombeans.randomizers.text.StringRandomizer;
 import io.github.benas.randombeans.randomizers.time.LocalDateRandomizer;
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
-
 import java.util.function.Supplier;
 
-public class PatientsGenerator extends BaseGenerator {
+public class DiseasesGenerator extends BaseGenerator {
 
     EnhancedRandom random;
 
-    PatientsGenerator() throws FileNotFoundException{
+    DiseasesGenerator() throws FileNotFoundException{
         generate();
     }
 
     private boolean generate() throws FileNotFoundException {
-        File names = new File("names");
-        File cities = new File("cities");
+        File diseases = new File("diseases");
 
-        Supplier<Patients.Gender> genderSupplier = () -> {
+        /*Supplier<Patients.Gender> genderSupplier = () -> {
             switch ((int) (Math.random() * 2 + 1)) {
                 case 1: return Patients.Gender.FEMALE;
                 case 2: return Patients.Gender.MALE;
                 default: return Patients.Gender.MALE;
             }
-        };
+        };*/
 
         random = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
                 .randomize(FieldDefinitionBuilder.field()
-                        .named("name").ofType(String.class).get(), (Randomizer<String>) () -> {
+                        .named("disName").ofType(String.class).get(), (Randomizer<String>) () -> {
                             try {
-                                return choose(names);
+                                return choose(diseases);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
                             return null;
                         })
-                .randomize(FieldDefinitionBuilder.field()
-                        .named("birthDate").ofType(LocalDate.class).get(), new LocalDateRandomizer())
-                .randomize(FieldDefinitionBuilder.field()
-                        .named("gender").ofType(Patients.Gender.class).get(), genderSupplier)
-                .randomize(FieldDefinitionBuilder.field()
-                        .named("city").ofType(String.class).get(), (Randomizer<String>) () -> {
-                    try {
-                        return choose(cities);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .exclude(FieldDefinitionBuilder.field()
-                    .named("payments").get())
-                .exclude(FieldDefinitionBuilder.field()
-                    .named("treatments").get())
                 .stringLengthRange(5, 50)
+                .randomize(FieldDefinitionBuilder.field()
+                        .named("symptoms").ofType(String.class).get(), new StringRandomizer())
+                .exclude(FieldDefinitionBuilder.field()
+                        .named("disType").get())
                 .build();
-
         return true;
     }
 

@@ -5,16 +5,16 @@ import io.ebean.Ebean;
 public class ApplyDbMigration {
 
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    // ignore test-ebean.properties
-    System.setProperty("disableTestProperties", "true");
+        /* ignore test-ebean.properties */
+        System.setProperty("disableTestProperties", "true");
 
-    // starting EbeanServer triggers the apply of migrations
-    // ... when ebean.migration.run=true
-    Ebean.getDefaultServer();
+        // starting EbeanServer triggers the apply of migrations
+        // ... when ebean.migration.run=true
+        Ebean.getDefaultServer();
 
-    System.out.println("done");
-  }
+        System.out.println("done");
+    }
 
 }

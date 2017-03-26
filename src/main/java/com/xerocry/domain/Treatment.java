@@ -1,16 +1,21 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by raskia on 2/23/2017.
  */
 @Entity
 @Table(name = "Treatment")
+@Getter
+@Setter
 public class Treatment extends Model {
 
     @Id
@@ -43,13 +48,13 @@ public class Treatment extends Model {
     @JoinTable(name = "TREATMENT_DRUGS",
         joinColumns = @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id"),
         inverseJoinColumns = @JoinColumn(name = "drug_id", referencedColumnName = "drug_id"))
-    List<Drugs> drugs;
+    Set<Drugs> drugs;
 
     @ManyToMany
     @JoinTable(name = "TREATMENT_SERVICES",
             joinColumns = @JoinColumn(name = "treatment_id", referencedColumnName = "treatment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "service_id"))
-    List<Services> services;
+    Set<Services> services;
 
     public Treatment(LocalDate startDate) {
 //        this.patientId = patientId;
@@ -58,67 +63,22 @@ public class Treatment extends Model {
         this.startDate = startDate;
     }
 
-    public Patients getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Patients patientId) {
-        this.patientId = patientId;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getTreatment() {
-        return treatment;
-    }
-
-    public void setTreatment(String treatment) {
-        this.treatment = treatment;
-    }
-
-    public List<Drugs> getDrugs() {
-        return drugs;
-    }
-
-    public void addDrugs(Drugs drug) {
-        this.drugs.add(drug);
-    }
-
-    public Doctors getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(Doctors doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    public Diseases getDiseaseId() {
-        return diseaseId;
-    }
-
-    public void setDiseaseId(Diseases diseaseId) {
-        this.diseaseId = diseaseId;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public List<Services> getServices() {
-        return services;
+    public Treatment(Treatment other) {
+//        this.id = other.id;
+//        this.patientId = other.patientId;
+//        this.doctorId = other.doctorId;
+//        this.diseaseId = other.diseaseId;
+        this.startDate = other.startDate;
+        this.endDate = other.endDate;
+//        this.treatment = other.treatment;
+//        this.drugs = other.drugs;
+//        this.services = other.services;
     }
 
     public void addServices(Services service) {
         this.services.add(service);
+    }
+    public void addDrugs(Drugs drugs) {
+        this.drugs.add(drugs);
     }
 }

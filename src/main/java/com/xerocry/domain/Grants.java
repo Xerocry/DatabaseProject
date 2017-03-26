@@ -1,6 +1,8 @@
 package com.xerocry.domain;
 
 import io.ebean.Model;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
  * Created by raskia on 2/24/2017.
  */
 @Entity
+@Getter
+@Setter
 public class Grants extends Model {
 
     @Id
@@ -48,59 +52,14 @@ public class Grants extends Model {
         this.patient = patient;
     }
 
-    public Long getSum()     {
-        return sum;
-    }
-
-    public void setSum(Long sum) {
-        this.sum = sum;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public Boolean getPaidUp() {
-        return paidUp;
-    }
-
-    public void setPaidUp(Boolean paidUp) {
-        this.paidUp = paidUp;
-    }
-
-    public Services getService() {
-        return service;
-    }
-
-    public void setService(Services service) {
-        this.service = service;
-    }
-
-    public Drugs getDrug() {
-        return drug;
-    }
-
-    public void setDrug(Drugs drug) {
-        this.drug = drug;
-    }
-
-    public Doctors getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(Doctors doctor) {
-        this.doctor = doctor;
-    }
-
-    public Patients getPatient() {
-        return patient;
-    }
-
-    public void setPatient(Patients patient) {
-        this.patient = patient;
+    public Grants(Grants other) {
+//        this.grantId = other.grantId;
+        this.sum = other.sum;
+        this.date = other.date;
+        this.paidUp = other.paidUp;
+//        this.service = other.service;
+//        this.drug = other.drug;
+//        this.doctor = other.doctor;
+//        this.patient = other.patient;
     }
 }

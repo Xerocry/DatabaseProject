@@ -1,9 +1,7 @@
 package main;
 
-import io.ebean.Ebean;
 import io.ebean.Platform;
 import io.ebean.dbmigration.DbMigration;
-import org.junit.Test;
 
 import java.io.IOException;
 
@@ -28,24 +26,10 @@ public class MainDbMigration {
     // generate a migration using drops from a prior version
     //System.setProperty("ddl.migration.pendingDropsFor", "1.2");
 
-//    Class.forName("com.")
     DbMigration dbMigration = new DbMigration();
     dbMigration.setPlatform(Platform.POSTGRES);
     // generate the migration ddl and xml
     // ... with EbeanServer in "offline" mode
     dbMigration.generateMigration();
-  }
-
-  @Test
-  public void generate() {
-
-    System.setProperty("ddl.migration.generate", "true");
-
-    System.setProperty("ddl.migration.version", "1.1");
-    System.setProperty("ddl.migration.name", "support end dating");
-
-    // migration will be generated when EbeanServer instance starts
-    // ... typically by running your application.
-    Ebean.getDefaultServer();
   }
 }

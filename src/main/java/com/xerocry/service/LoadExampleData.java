@@ -3,21 +3,15 @@ package com.xerocry.service;
 /**
  * Created by raskia on 2/23/2017.
  */
+
 import com.xerocry.domain.*;
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
-//import com.xerocry.domain.Address;
-//import com.xerocry.domain.Contact;
-//import com.xerocry.domain.Country;
-//import com.xerocry.domain.Customer;
-//import com.xerocry.domain.Order;
-//import com.xerocry.domain.Order.Status;
-//import com.xerocry.domain.OrderDetail;
-//import com.xerocry.domain.Product;
+import io.github.benas.randombeans.randomizers.range.IntegerRangeRandomizer;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.*;
 
 public class LoadExampleData {
 
@@ -26,9 +20,27 @@ public class LoadExampleData {
     private static EbeanServer server = Ebean.getServer(null);
 
     static PatientsGenerator patientGen;
+    static DepartmentsGenerator departGen;
+    static DiseasesGenerator disGen;
+    static DiseasesTypesGenerator disTypesGen;
+    static DoctorsGenerator doctorsGen;
+    static DrugsGenerator drugsGen;
+    static GrantsGenerator grantsGen;
+    static PaymentsGenerator paymentsGen;
+    static ServicesGenerator servicesGen;
+    static TreatmentGenerator treatmentGen;
 
-    public static synchronized void load() throws FileNotFoundException{
-        patientGen  = new PatientsGenerator();
+    public static synchronized void load() throws IOException {
+        patientGen = new PatientsGenerator();
+        departGen = new DepartmentsGenerator();
+        disGen = new DiseasesGenerator();
+        disTypesGen = new DiseasesTypesGenerator();
+        doctorsGen = new DoctorsGenerator();
+        drugsGen = new DrugsGenerator();
+        grantsGen = new GrantsGenerator();
+        paymentsGen = new PaymentsGenerator();
+        servicesGen = new ServicesGenerator();
+        treatmentGen = new TreatmentGenerator();
 
         if (runOnce) {
             return;
@@ -41,17 +53,20 @@ public class LoadExampleData {
 //                return;
 //            }
 //            me.deleteAll();
-            for(int i=0; i<1000;i++) {
-                new Patients(patientGen.random.nextObject(Patients.class)).save();
+            for (int i = 0; i < 100; i++) {
+//                new Departments(departGen.random.nextObject(Departments.class)).save();
+//                new Doctors(doctorsGen.random.nextObject(Doctors.class)).save();
+//                new Patients(patientGen.random.nextObject(Patients.class)).save();
+//                new DiseasesTypes(disTypesGen.random.nextObject(DiseasesTypes.class)).save();
+//                new Diseases(disGen.random.nextObject(Diseases.class)).save();
+//                new Drugs(drugsGen.random.nextObject(Drugs.class)).save();
+//                new Services(servicesGen.random.nextObject(Services.class)).save();
+//                new Grants(grantsGen.random.nextObject(Grants.class)).save();
+//                new Payments(paymentsGen.random.nextObject(Payments.class)).save();
+//                new Treatment(treatmentGen.random.nextObject(Treatment.class)).save();
             }
-            new Patients(patientGen.random.nextObject(Patients.class)).save();
-//            me.insertPatients();
-//            me.createTreatment("Treat1", LocalDate.now(), LocalDate.of(2015, 12, 02));
-//            me.createTreatment("Treat2", LocalDate.now(), LocalDate.of(2016, 11, 02));
-//            me.insertCountries();
-//            me.insertProducts();
-//            me.insertTestCustAndOrders();
         });
+        generateSome(10);
         runOnce = true;
     }
 
@@ -78,19 +93,137 @@ public class LoadExampleData {
     }
 
 
-    public void insertPatients(){
-        server.execute(()->{
-           new Patients( "Andrey", LocalDate.now(), Patients.Gender.MALE).save();
-           new Patients( "Marina", LocalDate.now(), Patients.Gender.FEMALE).save();
-           new Patients( "Derek", LocalDate.now(), Patients.Gender.MALE).save();
+    public void insertPatients() {
+        server.execute(() -> {
+            new Patients("Andrey", LocalDate.now(), Patients.Gender.MALE).save();
+            new Patients("Marina", LocalDate.now(), Patients.Gender.FEMALE).save();
+            new Patients("Derek", LocalDate.now(), Patients.Gender.MALE).save();
         });
     }
 
+    static boolean generateSome(int genAmount) {
+        IntegerRangeRandomizer intRandomizer = new IntegerRangeRandomizer(0, genAmount - 1);
+
+        server.execute(() -> {
+            List<Departments> departments = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Departments o = new Departments(departGen.random.nextObject(Departments.class));
+                departments.add(o);
+                o.save();
+
+            }
+            System.out.println(departments);
+
+            List<Doctors> doctors = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Doctors o = new Doctors(doctorsGen.random.nextObject(Doctors.class));
+                o.setDepartId(departments.get(intRandomizer.getRandomValue()));
+                doctors.add(o);
+                o.save();
+            }
+            System.out.println(doctors);
+
+            List<Patients> patients = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Patients o = new Patients(patientGen.random.nextObject(Patients.class));
+                patients.add(o);
+                o.save();
+
+            }
+            System.out.println(patients);
+
+            List<DiseasesTypes> diseasesTypes = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                DiseasesTypes o = new DiseasesTypes(disTypesGen.random.nextObject(DiseasesTypes.class));
+                diseasesTypes.add(o);
+                o.save();
+
+            }
+            System.out.println(diseasesTypes);
+
+            List<Diseases> diseases = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Diseases o = new Diseases(disGen.random.nextObject(Diseases.class));
+                o.setDisType(diseasesTypes.get(intRandomizer.getRandomValue()));
+                diseases.add(o);
+                o.save();
+
+            }
+            System.out.println(diseases);
+
+            List<Drugs> drugs = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Drugs o = new Drugs(drugsGen.random.nextObject(Drugs.class));
+                o.setTypeId(diseasesTypes.get(intRandomizer.getRandomValue()));
+                o.save();
+                drugs.add(o);
+            }
+            System.out.println(drugs);
+
+            List<Services> services = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Services o = new Services(servicesGen.random.nextObject(Services.class));
+                o.save();
+                services.add(o);
+            }
+            System.out.println(services);
+
+            List<Grants> grants = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Grants o = new Grants(grantsGen.random.nextObject(Grants.class));
+                o.setDoctor(doctors.get(intRandomizer.getRandomValue()));
+                o.setDrug(drugs.get(intRandomizer.getRandomValue()));
+                o.setPatient(patients.get(intRandomizer.getRandomValue()));
+                o.setService(services.get(intRandomizer.getRandomValue()));
+                o.save();
+                grants.add(o);
+            }
+            System.out.println(grants);
+
+            List<Payments> payments = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Payments o = new Payments(patientGen.random.nextObject(Payments.class));
+                Set<Patients> patientsTo = new HashSet<>();
+                patientsTo.add(patients.get(intRandomizer.getRandomValue()));
+                o.setPatients(patientsTo);
+                o.save();
+                payments.add(o);
+            }
+            System.out.println(payments);
+
+            List<Treatment> treatments = new ArrayList<>();
+            for (int i = 0; i < genAmount; i++) {
+                Treatment o = new Treatment(treatmentGen.random.nextObject(Treatment.class));
+
+                o.setPatientId(patients.get(intRandomizer.getRandomValue()));
+                o.setDoctorId(doctors.get(intRandomizer.getRandomValue()));
+
+                Integer drugsToNum = intRandomizer.getRandomValue();
+                Set<Drugs> drugsTo = new HashSet<>();
+                for (int j = 0; j < drugsToNum; j++) {
+                    drugsTo.add(drugs.get(intRandomizer.getRandomValue()));
+                }
+                o.setDrugs(drugsTo);
+
+                Integer servicesToNum = intRandomizer.getRandomValue();
+                Set<Services> servicesTo = new HashSet<>();
+                for (int j = 0; j < servicesToNum; j++) {
+                    servicesTo.add(services.get(intRandomizer.getRandomValue()));
+                }
+                o.setServices(servicesTo);
+                o.save();
+                treatments.add(o);
+            }
+            System.out.println(treatments);
+
+        });
+        return true;
+    }
 
 
-    public void insertDoctors(){
-        server.execute(()->{
-            new Doctors(5,"Can heal", LocalDate.of(1995, 03, 12)).save();
+    public void insertDoctors() {
+        server.execute(() -> {
+            new Doctors(5, "Can heal", LocalDate.of(1995, 03, 12)).save();
         });
     }
 
@@ -115,7 +248,7 @@ public class LoadExampleData {
     }
 
     public Diseases createDisease(String name) {
-        Diseases dis = new Diseases(insertType("type"+UUID.randomUUID().toString()), name);
+        Diseases dis = new Diseases(insertType("type" + UUID.randomUUID().toString()), name);
         Ebean.save(dis);
         return dis;
     }
@@ -123,19 +256,13 @@ public class LoadExampleData {
 
     public static Patients createPatient(LocalDate regDate, String city, String name, LocalDate birthDate, Patients.Gender gender) {
         Patients patient = new Patients(name, birthDate, gender);
-//        Contact contact = new Contact();
-        if(regDate != null){
+        if (regDate != null) {
             patient.setRegDate(regDate);
         }
         if (city != null) {
             patient.setCity(city);
         }
         Ebean.save(patient);
-
-//        contact.setFirstName(firstName);
-//        contact.setLastName(lastName);
-//        String email = contact.getLastName() + (contactEmailNum++) + "@test.com";
-//        contact.setEmail(email.toLowerCase());
         return patient;
     }
 
@@ -152,205 +279,4 @@ public class LoadExampleData {
         }
         Ebean.save(treatment1);
     }
-
-
-//    public void insertCountries() {
-//
-//        server.execute(() ->  {
-//            new Country("NZ", "New Zealand").save();
-//            new Country("AU", "Australia").save();
-//        });
-//    }
-
-//    public void insertProducts() {
-//
-//        server.execute(() -> {
-//            Product p = new Product("C001", "Chair");
-//            server.save(p);
-//
-//            p = new Product("DSK1","Desk");
-//            server.save(p);
-//
-//            p = new Product("C002", "Computer");
-//
-//            server.save(p);
-//
-//            p = new Product("C003", "Printer");
-//            server.save(p);
-//        });
-//    }
-
-//    public void insertTestCustAndOrders() {
-//
-//
-//        Ebean.execute( () -> {
-//                    Customer cust1 = insertCustomer("Rob");
-//                    Customer cust2 = insertCustomerNoAddress();
-//                    insertCustomerFiona();
-//                    insertCustomerNoContacts("NocCust");
-//
-//                    createOrder1(cust1);
-//                    createOrder2(cust2);
-//                    createOrder3(cust1);
-//                    createOrder4(cust1);
-//                }
-//        );
-//    }
-
-//    public static Customer createCustAndOrder(String custName) {
-//
-//        LoadExampleData me = new LoadExampleData();
-//        Customer cust1 = insertCustomer(custName);
-//        me.createOrder1(cust1);
-//        return cust1;
-//    }
-//
-//    public static Order createOrderCustAndOrder(String custName) {
-//
-//        LoadExampleData me = new LoadExampleData();
-//        Customer cust1 = insertCustomer(custName);
-//        Order o = me.createOrder1(cust1);
-//        return o;
-//    }
-
-    private static int contactEmailNum = 1;
-
-//    private Customer insertCustomerFiona() {
-//
-//        Customer c = createCustomer("Fiona", "12 Apple St", "West Coast Rd", 1);
-//
-//        c.addContact(createContact("Fiona", "Black"));
-//        c.addContact(createContact("Tracy", "Red"));
-//
-//        Ebean.save(c);
-//        return c;
-//    }
-//
-//    public static Contact createContact(String firstName, String lastName) {
-//        Contact contact = new Contact();
-//        contact.setFirstName(firstName);
-//        contact.setLastName(lastName);
-//        String email = contact.getLastName() + (contactEmailNum++) + "@test.com";
-//        contact.setEmail(email.toLowerCase());
-//        return contact;
-//    }
-
-//    private Customer insertCustomerNoContacts(String name) {
-//
-//        Customer c = createCustomer(name, "15 Kumera Way", "Bos town", 1);
-//
-//        Ebean.save(c);
-//        return c;
-//    }
-//
-//    private Customer insertCustomerNoAddress() {
-//
-//        Customer c = new Customer("Jack Hill");
-//        c.addContact(createContact("Jack", "Black"));
-//        c.addContact(createContact("Jill", "Hill"));
-//        c.addContact(createContact("Mac", "Hill"));
-//
-//        Ebean.save(c);
-//        return c;
-//    }
-//
-//    private static Customer insertCustomer(String name) {
-//        Customer c = createCustomer(name, "1 Banana St", "P.O.Box 1234", 1);
-//        Ebean.save(c);
-//        return c;
-//    }
-//
-//    private static Customer createCustomer(String name, String shippingStreet, String billingStreet, int contactSuffix) {
-//
-//        Customer c = new Customer(name);
-//        if (contactSuffix > 0) {
-//            c.addContact(new Contact("Jim" + contactSuffix, "Cricket"));
-//            c.addContact(new Contact("Fred" + contactSuffix, "Blue"));
-//            c.addContact(new Contact("Bugs" + contactSuffix, "Bunny"));
-//        }
-//
-//        if (shippingStreet != null) {
-//            Address shippingAddr = new Address();
-//            shippingAddr.setLine1(shippingStreet);
-//            shippingAddr.setLine2("Sandringham");
-//            shippingAddr.setCity("Auckland");
-//            shippingAddr.setCountry(Country.find.ref("NZ"));
-//
-//            c.setShippingAddress(shippingAddr);
-//        }
-//
-//        if (billingStreet != null) {
-//            Address billingAddr = new Address();
-//            billingAddr.setLine1(billingStreet);
-//            billingAddr.setLine2("St Lukes");
-//            billingAddr.setCity("Auckland");
-//            billingAddr.setCountry(Ebean.getReference(Country.class, "NZ"));
-//
-//            c.setBillingAddress(billingAddr);
-//        }
-//
-//        return c;
-//    }
-//
-//    private Order createOrder1(Customer customer) {
-//
-//        Product product1 = Product.find.ref(1L);
-//        Product product2 = Product.find.ref(2L);
-//        Product product3 = Product.find.ref(3L);
-//
-//        Order order = new Order(customer);
-//
-//        List<OrderDetail> details = new ArrayList<>();
-//        details.add(new OrderDetail(product1, 5, 10.50));
-//        details.add(new OrderDetail(product2, 3, 1.10));
-//        details.add(new OrderDetail(product3, 1, 2.00));
-//        order.setDetails(details);
-//
-//        //order.addShipment(new OrderShipment());
-//
-//        Ebean.save(order);
-//        return order;
-//    }
-//
-//    private void createOrder2(Customer customer) {
-//
-//        Product product1 = Ebean.getReference(Product.class, 1);
-//
-//        Order order = new Order(customer);
-//        order.setStatus(Status.SHIPPED);
-//        order.setShipDate(LocalDate.now().plusDays(1));
-//
-//        List<OrderDetail> details = new ArrayList<>();
-//        details.add(new OrderDetail(product1, 4, 10.50));
-//        order.setDetails(details);
-//
-//        //order.addShipment(new OrderShipment());
-//
-//        Ebean.save(order);
-//    }
-//
-//    private void createOrder3(Customer customer) {
-//
-//        Product product1 = Product.find.ref(1L);
-//        Product product3 = Product.find.ref(3L);
-//
-//        Order order = new Order(customer);
-//        order.setStatus(Status.COMPLETE);
-//        order.setShipDate(LocalDate.now().plusDays(2));
-//
-//        List<OrderDetail> details = new ArrayList<>();
-//        details.add(new OrderDetail(product1, 3, 10.50));
-//        details.add(new OrderDetail(product3, 40, 2.10));
-//        order.setDetails(details);
-//
-//        //order.addShipment(new OrderShipment());
-//
-//        Ebean.save(order);
-//    }
-//
-//    private void createOrder4(Customer customer) {
-//
-//        Order order = new Order(customer);
-//        Ebean.save(order);
-//    }
 }

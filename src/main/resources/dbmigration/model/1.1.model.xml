@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE xml>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <addColumn tableName="departments">
+            <column name="depart_name" type="varchar(50)" notnull="true"/>
+        </addColumn>
+    </changeSet>
+    <changeSet type="pendingDrops">
+        <dropColumn columnName="departdepart_name_id" tableName="departments"/>
+    </changeSet>
+</migration>
