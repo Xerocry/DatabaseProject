@@ -25,14 +25,14 @@ public class TreatmentGenerator extends BaseGenerator {
 
     private boolean generate() throws FileNotFoundException {
         long minDay = LocalDate.of(1970, 1, 1).toEpochDay();
-        long maxDay = LocalDate.of(2015, 12, 31).toEpochDay();
+        long maxDay = LocalDate.of(2035, 12, 30).toEpochDay();
         long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
         LocalDate startDate = LocalDate.ofEpochDay(randomDay);
 
         random = EnhancedRandomBuilder.aNewEnhancedRandomBuilder()
                 .randomize(FieldDefinitionBuilder.field()
-                        .named("treatment").ofType(LocalDate.class).get(), new StringRandomizer())
-                .dateRange(startDate,  LocalDate.of(2030, 12, 31))
+                        .named("treatment").ofType(String.class).get(), new StringRandomizer())
+                .dateRange(startDate,  LocalDate.of(2035, 12, 31))
                 .exclude(FieldDefinitionBuilder.field()
                         .named("drugs").get())
                 .exclude(FieldDefinitionBuilder.field()
@@ -45,7 +45,6 @@ public class TreatmentGenerator extends BaseGenerator {
                         .named("diseaseId").get())
                 .stringLengthRange(5, 50)
                 .build();
-
         return true;
     }
 

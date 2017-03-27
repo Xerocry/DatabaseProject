@@ -36,6 +36,9 @@ public class Payments extends Model {
         NOT_PAID,
     }
 
+    @Column(nullable = false)
+    State state;
+
     @ManyToMany(mappedBy = "payments")
     Set<Patients> patients = new HashSet<>();
 
@@ -43,6 +46,7 @@ public class Payments extends Model {
 //        this.paymentId = other.paymentId;
         this.discount = other.discount;
         this.balance = other.balance;
+        this.state = other.state;
 //        this.patients = other.patients;
     }
 }

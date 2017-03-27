@@ -31,6 +31,7 @@ create table drugs (
   drug_id                       bigserial not null,
   type_id_type_id               bigint not null,
   drug_name                     varchar(50),
+  price                         integer,
   constraint pk_drugs primary key (drug_id)
 );
 
@@ -67,6 +68,8 @@ create table payments (
   payment_id                    bigserial not null,
   discount                      float,
   balance                       float not null,
+  state                         varchar(1) not null,
+  constraint ck_payments_state check ( state in ('N','P')),
   constraint pk_payments primary key (payment_id)
 );
 

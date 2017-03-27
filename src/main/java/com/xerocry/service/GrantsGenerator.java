@@ -7,6 +7,7 @@ import io.github.benas.randombeans.api.EnhancedRandom;
 import io.github.benas.randombeans.api.Randomizer;
 import io.github.benas.randombeans.randomizers.number.IntegerRandomizer;
 import io.github.benas.randombeans.randomizers.number.LongRandomizer;
+import io.github.benas.randombeans.randomizers.range.LongRangeRandomizer;
 import io.github.benas.randombeans.randomizers.time.LocalDateRandomizer;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class GrantsGenerator extends BaseGenerator {
                 .randomize(FieldDefinitionBuilder.field()
                         .named("date").ofType(LocalDate.class).get(), new LocalDateRandomizer())
                 .randomize(FieldDefinitionBuilder.field()
-                        .named("sum").ofType(Long.class).get(), new LongRandomizer())
+                        .named("sum").ofType(Long.class).get(), new LongRangeRandomizer(Long.parseLong("0"), Long.MAX_VALUE/2))
                 .exclude(FieldDefinitionBuilder.field()
                         .named("service").get())
                 .exclude(FieldDefinitionBuilder.field()

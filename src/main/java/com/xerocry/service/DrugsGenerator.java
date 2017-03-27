@@ -4,9 +4,11 @@ import io.github.benas.randombeans.EnhancedRandomBuilder;
 import io.github.benas.randombeans.FieldDefinitionBuilder;
 import io.github.benas.randombeans.api.EnhancedRandom;
 import io.github.benas.randombeans.api.Randomizer;
+import io.github.benas.randombeans.randomizers.range.IntegerRangeRandomizer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InterruptedIOException;
 
 public class DrugsGenerator extends BaseGenerator {
 
@@ -29,6 +31,8 @@ public class DrugsGenerator extends BaseGenerator {
                             }
                             return null;
                         })
+                .randomize(FieldDefinitionBuilder.field()
+                .named("price").ofType(Integer.class).get(), new IntegerRangeRandomizer(0, Integer.MAX_VALUE))
                 .exclude(FieldDefinitionBuilder.field()
                         .named("typeId").get())
                 .exclude(FieldDefinitionBuilder.field()

@@ -1,16 +1,12 @@
 package com.xerocry.service;
 
-/**
- * Created by raskia on 2/23/2017.
- */
-
 import com.xerocry.domain.*;
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
 import io.github.benas.randombeans.randomizers.range.IntegerRangeRandomizer;
 
+import javax.print.Doc;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.*;
 
 public class LoadExampleData {
@@ -19,18 +15,18 @@ public class LoadExampleData {
 
     private static EbeanServer server = Ebean.getServer(null);
 
-    static PatientsGenerator patientGen;
-    static DepartmentsGenerator departGen;
-    static DiseasesGenerator disGen;
-    static DiseasesTypesGenerator disTypesGen;
-    static DoctorsGenerator doctorsGen;
-    static DrugsGenerator drugsGen;
-    static GrantsGenerator grantsGen;
-    static PaymentsGenerator paymentsGen;
-    static ServicesGenerator servicesGen;
-    static TreatmentGenerator treatmentGen;
+    private static PatientsGenerator patientGen;
+    private static DepartmentsGenerator departGen;
+    private static DiseasesGenerator disGen;
+    private static DiseasesTypesGenerator disTypesGen;
+    private static DoctorsGenerator doctorsGen;
+    private static DrugsGenerator drugsGen;
+    private static GrantsGenerator grantsGen;
+    private static PaymentsGenerator paymentsGen;
+    private static ServicesGenerator servicesGen;
+    private static TreatmentGenerator treatmentGen;
 
-    public static synchronized void load() throws IOException {
+    public static synchronized void load(int num) throws IOException {
         patientGen = new PatientsGenerator();
         departGen = new DepartmentsGenerator();
         disGen = new DiseasesGenerator();
@@ -48,34 +44,13 @@ public class LoadExampleData {
 
         final LoadExampleData me = new LoadExampleData();
 
-        server.execute(() -> {
-//            if (Country.find.query().findCount() > 0) {
-//                return;
-//            }
-//            me.deleteAll();
-            for (int i = 0; i < 100; i++) {
-//                new Departments(departGen.random.nextObject(Departments.class)).save();
-//                new Doctors(doctorsGen.random.nextObject(Doctors.class)).save();
-//                new Patients(patientGen.random.nextObject(Patients.class)).save();
-//                new DiseasesTypes(disTypesGen.random.nextObject(DiseasesTypes.class)).save();
-//                new Diseases(disGen.random.nextObject(Diseases.class)).save();
-//                new Drugs(drugsGen.random.nextObject(Drugs.class)).save();
-//                new Services(servicesGen.random.nextObject(Services.class)).save();
-//                new Grants(grantsGen.random.nextObject(Grants.class)).save();
-//                new Payments(paymentsGen.random.nextObject(Payments.class)).save();
-//                new Treatment(treatmentGen.random.nextObject(Treatment.class)).save();
-            }
-        });
-        generateSome(10);
+        server.execute(me::deleteAll);
+        generateSome(num);
         runOnce = true;
     }
 
-    public void deleteAll() {
+    private void deleteAll() {
         Ebean.execute(() -> {
-
-            // Ebean.currentTransaction().setBatchMode(false);
-
-            // orm update use bean name and bean properties
             server.createUpdate(Departments.class, "delete from departments").execute();
             server.createUpdate(Diseases.class, "delete from diseases").execute();
             server.createUpdate(Doctors.class, "delete from doctors").execute();
@@ -85,28 +60,15 @@ public class LoadExampleData {
             server.createUpdate(Patients.class, "delete from patients").execute();
             server.createUpdate(Services.class, "delete from services").execute();
             server.createUpdate(Treatment.class, "delete from treatment").execute();
-
-//            // sql update uses table and column names
-//            server.createSqlUpdate("delete from o_country").execute();
-//            server.createSqlUpdate("delete from o_product").execute();
         });
     }
 
-
-    public void insertPatients() {
-        server.execute(() -> {
-            new Patients("Andrey", LocalDate.now(), Patients.Gender.MALE).save();
-            new Patients("Marina", LocalDate.now(), Patients.Gender.FEMALE).save();
-            new Patients("Derek", LocalDate.now(), Patients.Gender.MALE).save();
-        });
-    }
-
-    static boolean generateSome(int genAmount) {
-        IntegerRangeRandomizer intRandomizer = new IntegerRangeRandomizer(0, genAmount - 1);
+    private static boolean generateSome(int genAmount) {
+        IntegerRangeRandomizer intRandomizer = new IntegerRangeRandomizer(0, genAmount);
 
         server.execute(() -> {
             List<Departments> departments = new ArrayList<>();
-            for (int i = 0; i < genAmount; i++) {
+            for (int i = 0; i < genAmount/10; i++) {
                 Departments o = new Departments(departGen.random.nextObject(Departments.class));
                 departments.add(o);
                 o.save();
@@ -117,14 +79,14 @@ public class LoadExampleData {
             List<Doctors> doctors = new ArrayList<>();
             for (int i = 0; i < genAmount; i++) {
                 Doctors o = new Doctors(doctorsGen.random.nextObject(Doctors.class));
-                o.setDepartId(departments.get(intRandomizer.getRandomValue()));
+                o.setDepartId(departments.get(new IntegerRangeRandomizer(0, genAmount/10).getRandomValue()));
                 doctors.add(o);
                 o.save();
             }
             System.out.println(doctors);
 
             List<Patients> patients = new ArrayList<>();
-            for (int i = 0; i < genAmount; i++) {
+            for (int i = 0; i < genAmount*5; i++) {
                 Patients o = new Patients(patientGen.random.nextObject(Patients.class));
                 patients.add(o);
                 o.save();
@@ -171,10 +133,13 @@ public class LoadExampleData {
             List<Grants> grants = new ArrayList<>();
             for (int i = 0; i < genAmount; i++) {
                 Grants o = new Grants(grantsGen.random.nextObject(Grants.class));
+                Drugs drug = drugs.get(intRandomizer.getRandomValue());
+                Services service = services.get(intRandomizer.getRandomValue());
+                o.setSum(Integer.toUnsignedLong(drug.getPrice() + service.getPrice()));
                 o.setDoctor(doctors.get(intRandomizer.getRandomValue()));
-                o.setDrug(drugs.get(intRandomizer.getRandomValue()));
-                o.setPatient(patients.get(intRandomizer.getRandomValue()));
-                o.setService(services.get(intRandomizer.getRandomValue()));
+                o.setPatient(patients.get(new IntegerRangeRandomizer(0, genAmount*5).getRandomValue()));
+                o.setDrug(drug);
+                o.setService(service);
                 o.save();
                 grants.add(o);
             }
@@ -182,9 +147,9 @@ public class LoadExampleData {
 
             List<Payments> payments = new ArrayList<>();
             for (int i = 0; i < genAmount; i++) {
-                Payments o = new Payments(patientGen.random.nextObject(Payments.class));
+                Payments o = new Payments(paymentsGen.random.nextObject(Payments.class));
                 Set<Patients> patientsTo = new HashSet<>();
-                patientsTo.add(patients.get(intRandomizer.getRandomValue()));
+                patientsTo.add(patients.get(new IntegerRangeRandomizer(0, genAmount*5).getRandomValue()));
                 o.setPatients(patientsTo);
                 o.save();
                 payments.add(o);
@@ -192,11 +157,12 @@ public class LoadExampleData {
             System.out.println(payments);
 
             List<Treatment> treatments = new ArrayList<>();
-            for (int i = 0; i < genAmount; i++) {
+            for (int i = 0; i < genAmount * 10; i++) {
                 Treatment o = new Treatment(treatmentGen.random.nextObject(Treatment.class));
 
-                o.setPatientId(patients.get(intRandomizer.getRandomValue()));
+                o.setPatientId(patients.get(new IntegerRangeRandomizer(0, genAmount*5).getRandomValue()));
                 o.setDoctorId(doctors.get(intRandomizer.getRandomValue()));
+                o.setDiseaseId(diseases.get(intRandomizer.getRandomValue()));
 
                 Integer drugsToNum = intRandomizer.getRandomValue();
                 Set<Drugs> drugsTo = new HashSet<>();
@@ -218,65 +184,5 @@ public class LoadExampleData {
 
         });
         return true;
-    }
-
-
-    public void insertDoctors() {
-        server.execute(() -> {
-            new Doctors(5, "Can heal", LocalDate.of(1995, 03, 12)).save();
-        });
-    }
-
-    private static Departments insertDepartment(String name) {
-        Departments department = new Departments(name);
-        Ebean.save(department);
-        return department;
-    }
-
-    public Doctors createDoctor(String skills, int exp, LocalDate hiredDate) {
-        Departments department = insertDepartment("Depart" + UUID.randomUUID().toString());
-        Doctors doctor = new Doctors(exp, skills, hiredDate);
-        doctor.setDepartId(department);
-        Ebean.save(doctor);
-        return doctor;
-    }
-
-    public static DiseasesTypes insertType(String type) {
-        DiseasesTypes disType = new DiseasesTypes(type);
-        Ebean.save(disType);
-        return disType;
-    }
-
-    public Diseases createDisease(String name) {
-        Diseases dis = new Diseases(insertType("type" + UUID.randomUUID().toString()), name);
-        Ebean.save(dis);
-        return dis;
-    }
-
-
-    public static Patients createPatient(LocalDate regDate, String city, String name, LocalDate birthDate, Patients.Gender gender) {
-        Patients patient = new Patients(name, birthDate, gender);
-        if (regDate != null) {
-            patient.setRegDate(regDate);
-        }
-        if (city != null) {
-            patient.setCity(city);
-        }
-        Ebean.save(patient);
-        return patient;
-    }
-
-    public void createTreatment(String treatment, LocalDate endDate, LocalDate startDate) {
-        Treatment treatment1 = new Treatment(startDate);
-        treatment1.setDoctorId(createDoctor(UUID.randomUUID().toString(), 10, LocalDate.of(1995, 10, 1)));
-        treatment1.setPatientId(createPatient(LocalDate.now(), "Piter", "Andrey", LocalDate.now(), Patients.Gender.MALE));
-        treatment1.setDiseaseId(createDisease("dis" + UUID.randomUUID().toString()));
-        if (treatment != null) {
-            treatment1.setTreatment(treatment);
-        }
-        if (endDate != null) {
-            treatment1.setEndDate(endDate);
-        }
-        Ebean.save(treatment1);
     }
 }

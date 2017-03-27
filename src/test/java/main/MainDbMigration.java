@@ -20,8 +20,8 @@ public class MainDbMigration {
   public static void main(String[] args) throws IOException {
 
     // optionally specify the version and name
-    //System.setProperty("ddl.migration.version", "1.1");
-    //System.setProperty("ddl.migration.name", "add bars");
+    System.setProperty("ddl.migration.version", "1.3");
+    System.setProperty("ddl.migration.name", "add drug price");
 
     // generate a migration using drops from a prior version
     //System.setProperty("ddl.migration.pendingDropsFor", "1.2");

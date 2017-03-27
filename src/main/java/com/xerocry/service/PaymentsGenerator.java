@@ -35,7 +35,7 @@ public class PaymentsGenerator extends BaseGenerator {
                 .randomize(FieldDefinitionBuilder.field()
                         .named("discount").ofType(Double.class).get(), new DoubleRandomizer())
                 .randomize(FieldDefinitionBuilder.field()
-                        .named("State").ofType(Payments.State.class).get(), stateSupplier)
+                        .named("state").ofType(Payments.State.class).get(), stateSupplier)
                 .randomize(FieldDefinitionBuilder.field()
                         .named("balance").ofType(String.class).get(), new DoubleRandomizer())
                 .exclude(FieldDefinitionBuilder.field()

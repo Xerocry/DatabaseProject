@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE xml>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <addColumn tableName="payments">
+            <column name="state" type="varchar(1)" notnull="true" checkConstraint="check ( state in ('N','P'))" checkConstraintName="ck_payments_state"/>
+        </addColumn>
+    </changeSet>
+</migration>

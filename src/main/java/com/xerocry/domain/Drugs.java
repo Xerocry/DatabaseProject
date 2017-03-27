@@ -30,6 +30,8 @@ public class Drugs extends Model {
     @Column(length = 50, name = "drug_name")
     String drugName;
 
+    Integer price;
+
     @ManyToMany(mappedBy = "drugs")
     Set<Treatment> treatments = new HashSet<>();
 
@@ -40,7 +42,7 @@ public class Drugs extends Model {
 
     public Drugs(Drugs other) {
 //        this.drugId = other.drugId;
-//        this.typeId = other.typeId;
+        this.price = other.price;
         this.drugName = other.drugName;
 //        this.treatments = other.treatments;
     }

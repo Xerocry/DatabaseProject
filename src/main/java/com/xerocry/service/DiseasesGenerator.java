@@ -42,9 +42,8 @@ public class DiseasesGenerator extends BaseGenerator {
                             }
                             return null;
                         })
-                .stringLengthRange(5, 50)
                 .randomize(FieldDefinitionBuilder.field()
-                        .named("symptoms").ofType(String.class).get(), new StringRandomizer())
+                        .named("symptoms").ofType(String.class).get(), new StringRandomizer(50))
                 .exclude(FieldDefinitionBuilder.field()
                         .named("disType").get())
                 .build();
