@@ -35,6 +35,12 @@ create table drugs (
   constraint pk_drugs primary key (drug_id)
 );
 
+create table restrictions (
+  drug1                         bigint not null,
+  drug2                         bigint not null,
+  constraint pk_restrictions primary key (drug1,drug2)
+);
+
 create table grants (
   grant_id                      bigserial not null,
   grant_sum                     bigint,
@@ -111,6 +117,12 @@ create index ix_doctors_depart_id_depart_id on doctors (depart_id_depart_id);
 
 alter table drugs add constraint fk_drugs_type_id_type_id foreign key (type_id_type_id) references diseases_types (type_id) on delete restrict on update restrict;
 create index ix_drugs_type_id_type_id on drugs (type_id_type_id);
+
+alter table restrictions add constraint fk_restrictions_drugs_1 foreign key (drug1) references drugs (drug_id) on delete restrict on update restrict;
+create index ix_restrictions_drugs_1 on restrictions (drug1);
+
+alter table restrictions add constraint fk_restrictions_drugs_2 foreign key (drug2) references drugs (drug_id) on delete restrict on update restrict;
+create index ix_restrictions_drugs_2 on restrictions (drug2);
 
 alter table grants add constraint fk_grants_service_service_id foreign key (service_service_id) references services (service_id) on delete restrict on update restrict;
 create index ix_grants_service_service_id on grants (service_service_id);

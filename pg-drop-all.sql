@@ -7,6 +7,12 @@ drop index if exists ix_doctors_depart_id_depart_id;
 alter table if exists drugs drop constraint if exists fk_drugs_type_id_type_id;
 drop index if exists ix_drugs_type_id_type_id;
 
+alter table if exists restrictions drop constraint if exists fk_restrictions_drugs_1;
+drop index if exists ix_restrictions_drugs_1;
+
+alter table if exists restrictions drop constraint if exists fk_restrictions_drugs_2;
+drop index if exists ix_restrictions_drugs_2;
+
 alter table if exists grants drop constraint if exists fk_grants_service_service_id;
 drop index if exists ix_grants_service_service_id;
 
@@ -55,6 +61,8 @@ drop table if exists diseases_types cascade;
 drop table if exists doctors cascade;
 
 drop table if exists drugs cascade;
+
+drop table if exists restrictions cascade;
 
 drop table if exists grants cascade;
 

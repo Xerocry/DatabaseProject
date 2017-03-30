@@ -38,6 +38,8 @@ public class DrugsGenerator extends BaseGenerator {
                 .exclude(FieldDefinitionBuilder.field()
                         .named("treatments").get())
                 .stringLengthRange(5, 50)
+                .exclude(FieldDefinitionBuilder.field()
+                        .named("restrictions").get())
                 .build();
         return true;
     }

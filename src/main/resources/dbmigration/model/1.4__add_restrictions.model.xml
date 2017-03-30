@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!DOCTYPE xml>
+<migration xmlns="http://ebean-orm.github.io/xml/ns/dbmigration">
+    <changeSet type="apply">
+        <createTable name="restrictions" pkName="pk_restrictions">
+            <column name="drug1" type="bigint" notnull="true" primaryKey="true"/>
+            <column name="drug2" type="bigint" notnull="true" primaryKey="true"/>
+            <foreignKey name="fk_restrictions_drugs_1" columnNames="drug1" refColumnNames="drug_id" refTableName="drugs" indexName="ix_restrictions_drugs_1"/>
+            <foreignKey name="fk_restrictions_drugs_2" columnNames="drug2" refColumnNames="drug_id" refTableName="drugs" indexName="ix_restrictions_drugs_2"/>
+        </createTable>
+    </changeSet>
+</migration>

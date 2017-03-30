@@ -35,6 +35,13 @@ public class Drugs extends Model {
     @ManyToMany(mappedBy = "drugs")
     Set<Treatment> treatments = new HashSet<>();
 
+    @JoinTable(name = "restrictions", joinColumns = {
+            @JoinColumn(name = "drug1", referencedColumnName = "drug_id", nullable = false)}, inverseJoinColumns = {
+            @JoinColumn(name = "drug2", referencedColumnName = "drug_id", nullable = false)})
+    @ManyToMany
+    Set<Drugs> restrictionsColl;
+
+
     public Drugs(DiseasesTypes typeId, String drugName) {
         this.typeId = typeId;
         this.drugName = drugName;

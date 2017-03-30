@@ -13,7 +13,7 @@ public class PatientTest {
 
     @Test
     public void findSome() throws IOException {
-        LoadExampleData.load(10);
+        LoadExampleData.load(1000);
 
 //    List<Product> products = new QProduct()
 //        .name.istartsWith("c")

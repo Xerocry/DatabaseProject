@@ -4,8 +4,6 @@ import com.xerocry.domain.*;
 import io.ebean.Ebean;
 import io.ebean.EbeanServer;
 import io.github.benas.randombeans.randomizers.range.IntegerRangeRandomizer;
-
-import javax.print.Doc;
 import java.io.IOException;
 import java.util.*;
 
@@ -109,7 +107,6 @@ public class LoadExampleData {
                 o.setDisType(diseasesTypes.get(intRandomizer.getRandomValue()));
                 diseases.add(o);
                 o.save();
-
             }
             System.out.println(diseases);
 
@@ -117,7 +114,22 @@ public class LoadExampleData {
             for (int i = 0; i < genAmount; i++) {
                 Drugs o = new Drugs(drugsGen.random.nextObject(Drugs.class));
                 o.setTypeId(diseasesTypes.get(intRandomizer.getRandomValue()));
-                o.save();
+                switch ((int) (Math.random() * 3 + 1)) {
+                    case 1: o.save();
+
+                    case 2: o.save();
+
+                    case 3: {
+                        if (drugs.isEmpty()) {
+                            break;
+                        }
+                        Set<Drugs> drugRestr = new HashSet<>();
+                        drugRestr.add(drugs.get(new IntegerRangeRandomizer(0, drugs.size()-1).getRandomValue()));
+                        o.setRestrictionsColl(drugRestr);
+                        o.save();
+                    }
+                    default: o.save();
+                }
                 drugs.add(o);
             }
             System.out.println(drugs);
@@ -167,6 +179,10 @@ public class LoadExampleData {
                 Integer drugsToNum = intRandomizer.getRandomValue();
                 Set<Drugs> drugsTo = new HashSet<>();
                 for (int j = 0; j < drugsToNum; j++) {
+                    Drugs drug = drugs.get(intRandomizer.getRandomValue());
+                    while (checkRestriction(drug, drugsTo)) {
+                        drug = drugs.get(intRandomizer.getRandomValue());
+                    }
                     drugsTo.add(drugs.get(intRandomizer.getRandomValue()));
                 }
                 o.setDrugs(drugsTo);
@@ -184,5 +200,14 @@ public class LoadExampleData {
 
         });
         return true;
+    }
+
+    public static boolean checkRestriction(Drugs drug1, Set<Drugs> drug2) {
+        for (Drugs dr: drug2) {
+            if (dr.equals(drug1)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
